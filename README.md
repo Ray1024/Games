@@ -1,5 +1,5 @@
 # Ray1024_Cocos2dx_Games
-Some games developed based on cocos2d-x.
+Some games developed based on cocos2d-x.</br>
 My Blog Link : http://www.cnblogs.com/Ray1024/
 
 ## planeGame
