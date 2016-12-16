@@ -2,6 +2,10 @@
 Some games developed based on cocos2d-x.</br>
 My Blog Link : http://www.cnblogs.com/Ray1024/
 
+## doudizhuGame
+This game is developed based on cocos2d-x 3.0 in lua.</br>
+This game is modeled on a kind of card game called doudizhu.
+
 ## planeGame
 This game is developed based on cocos2d-x 3.0.</br>
 This game is modeled on wechat plane game.
