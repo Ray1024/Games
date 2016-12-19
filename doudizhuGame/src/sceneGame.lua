@@ -64,9 +64,9 @@ function sceneGame()
 	local i=0
 	while( i < 17 )
 	do
-		local poker_back = cc.Sprite:createWithSpriteFrameName("b/poker_back.png")
+		--local poker_back = cc.Sprite:createWithSpriteFrameName("b/poker_back.png")
+		local poker_back = cc.Sprite:create("poker.png", cc.rect(0 + 105 * i ,0 + 142 * 0,94,130))
 		poker_back:setPosition(origin.x + 75 + 50*i, origin.y + 85)
-		poker_back:setScale(0.8)
 		scene:addChild(poker_back)	
 	
 		i = i+1

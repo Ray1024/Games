@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4E6A7A0E-DDD8-4BAA-8B22-C964069364ED}</ProjectGuid>
-    <ProjectName>CocosLuaTest</ProjectName>
+    <ProjectName>doudizhuGame</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -97,11 +97,11 @@
       <MkTypLibCompatible>false</MkTypLibCompatible>
       <TargetEnvironment>Win32</TargetEnvironment>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <HeaderFileName>CocosLuaTest.h</HeaderFileName>
-      <InterfaceIdentifierFileName>CocosLuaTest_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>CocosLuaTest_p.c</ProxyFileName>
+      <HeaderFileName>doudizhuGame.h</HeaderFileName>
+      <InterfaceIdentifierFileName>doudizhuGame_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>doudizhuGame_p.c</ProxyFileName>
       <GenerateStublessProxies>true</GenerateStublessProxies>
-      <TypeLibraryName>$(IntDir)/CocosLuaTest.tlb</TypeLibraryName>
+      <TypeLibraryName>$(IntDir)/doudizhuGame.tlb</TypeLibraryName>
       <DllDataFileName>
       </DllDataFileName>
     </Midl>
@@ -146,11 +146,11 @@
       <MkTypLibCompatible>false</MkTypLibCompatible>
       <TargetEnvironment>Win32</TargetEnvironment>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <HeaderFileName>CocosLuaTest.h</HeaderFileName>
-      <InterfaceIdentifierFileName>CocosLuaTest_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>CocosLuaTest_p.c</ProxyFileName>
+      <HeaderFileName>doudizhuGame.h</HeaderFileName>
+      <InterfaceIdentifierFileName>doudizhuGame_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>doudizhuGame_p.c</ProxyFileName>
       <GenerateStublessProxies>true</GenerateStublessProxies>
-      <TypeLibraryName>$(IntDir)/CocosLuaTest.tlb</TypeLibraryName>
+      <TypeLibraryName>$(IntDir)/doudizhuGame.tlb</TypeLibraryName>
       <DllDataFileName>
       </DllDataFileName>
     </Midl>
