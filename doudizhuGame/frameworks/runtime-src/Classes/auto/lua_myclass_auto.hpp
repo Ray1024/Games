@@ -33,4 +33,9 @@ int register_all_myclass(lua_State* tolua_S);
 
 
 
+
+
+
+
+
 #endif // __myclass_h__

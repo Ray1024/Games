@@ -2,10 +2,10 @@
 
 USING_NS_CC;
 
-Poker* Poker::create(int pokerIndex)
+Poker* Poker::create(PokerInfo info)
 {
 	Poker *sprite = new (std::nothrow) Poker();
-	if (sprite && sprite->init(pokerIndex))
+	if (sprite && sprite->init(info))
 	{
 		sprite->autorelease();
 		return sprite;
@@ -14,39 +14,51 @@ Poker* Poker::create(int pokerIndex)
 	return nullptr;
 }
 
-bool Poker::init(int pokerIndex)
+bool Poker::init(PokerInfo info)
 {
 	// 初始化基类--------------------------------------------------------------
-    if ( !Sprite::init() )
-    {
-        return false;
-    }
-
-	_typeIndex = (Poker::Type)pokerIndex;
-
-	// 根据类型获取行列索引
-
-	int line, row;
-
-	if (_typeIndex == Poker::Type::DW)
+	if ( !Sprite::init() )
 	{
-		line = 0;
-		row = 13;
+		return false;
+	}
+
+	_info = info;
+
+	auto cardFront = Sprite::createWithSpriteFrameName("b/bg.png");
+	this->addChild(cardFront);
+	_size = cardFront->getContentSize();
+
+	if (_info._num == PokerNum::NUM_DW)
+	{
+		auto cardNum = Sprite::createWithSpriteFrameName("b/smalltag_4.png");
+		cardNum->setPosition(-50,10);
+		this->addChild(cardNum);
 	} 
-	else if (_typeIndex == Poker::Type::XW)
+	else if (_info._num == PokerNum::NUM_XW)
 	{
-		line = 1;
-		row = 13;
+		auto cardNum = Sprite::createWithSpriteFrameName("b/smalltag_5.png");
+		cardNum->setPosition(-50,10);
+		this->addChild(cardNum);
 	}
 	else 
 	{
-		line = _typeIndex/13;
-		row = _typeIndex%13;
-	}
+		std::stringstream strNum;
+		strNum << "b/black_" << _info._num << ".png";
+		auto cardNum = Sprite::createWithSpriteFrameName(strNum.str());
+		cardNum->setPosition(-50,70);
+		this->addChild(cardNum);
 
-	// 牌面
-	_front = Sprite::create("poker.png", Rect(105 * row, 142 * line,POKER_W,POKER_H));
-	this->addChild(_front);
+		std::stringstream strTag;
+		strTag << "b/bigtag_" << _info._tag << ".png";
+		auto cardSmallTag = Sprite::createWithSpriteFrameName(strTag.str());
+		cardSmallTag->setScale(0.5);
+		cardSmallTag->setPosition(-50,20);
+		this->addChild(cardSmallTag);
+
+		auto cardTag = Sprite::createWithSpriteFrameName(strTag.str());
+		cardTag->setPosition(20,-30);
+		this->addChild(cardTag);
+	}
 
 	_isSelected = false;
 
@@ -61,14 +73,12 @@ bool Poker::init(int pokerIndex)
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-    return true;
+	return true;
 }
 
 Rect Poker::getRect()
 {
-// 	auto s = _front->getTexture()->getContentSize();
-// 	return Rect(-s.width / 2, -s.height / 2, s.width, s.height);
-	return Rect(-95 / 2, -130 / 2, 95, 130);
+	return Rect(-_size.width / 2, -_size.height / 2, _size.width, _size.height);
 }
 
 bool Poker::onTouchBegan(Touch* touch, Event* event)
@@ -102,10 +112,10 @@ void Poker::click()
 {
 	if (_isSelected)
 	{
-		setPosition(_position.x,_position.y -10);
+		setPosition(_position.x,_position.y -20);
 	} else
 	{
-		setPosition(_position.x,_position.y +10);
+		setPosition(_position.x,_position.y +20);
 	}
 	_isSelected = !_isSelected;
 }

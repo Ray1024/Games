@@ -35,10 +35,10 @@ function sceneGame()
     player2:setPosition(origin.x + player2:getContentSize().width/2, origin.y + visibleSize.height - player2:getContentSize().height/2 + 10)
 	scene:addChild(player2)
 	
-	local player2_poker = cc.Sprite:createWithSpriteFrameName("b/poker_back.png")
-	player2_poker:setPosition(origin.x + 150, origin.y + 485)
-	player2_poker:setScale(0.4)
-	scene:addChild(player2_poker)	
+	-- 牌堆
+	local pokerManager0 = IPokerManager:create()
+	pokerManager0:setPosition(150,485)
+	scene:addChild(pokerManager0, 1)
 	
 	-- 玩家3头像和牌数
 	
@@ -47,10 +47,10 @@ function sceneGame()
     player3:setPosition(origin.x + visibleSize.width - player3:getContentSize().width/2, origin.y + visibleSize.height - player3:getContentSize().height/2 + 10)
 	scene:addChild(player3)
 	
-	local player3_poker = cc.Sprite:createWithSpriteFrameName("b/poker_back.png")
-	player3_poker:setPosition(origin.x + 810, origin.y + 485)
-	player3_poker:setScale(0.4)
-	scene:addChild(player3_poker)	
+	-- 牌堆
+	local pokerManager1 = IPokerManager:create()
+	pokerManager1:setPosition(800,485)
+	scene:addChild(pokerManager1, 1)
 	
 	-- 玩家头像
 		
@@ -80,6 +80,8 @@ function sceneGame()
 	local function menuCallbackChupai()
 		print("出牌")
 		pokerManager:chuPai()
+		pokerManager0:chuPai()
+		pokerManager1:chuPai()
 	end
 	
 	local itemTishi = createCustomMenuItem("item_tishi.png", "item_tishi_d.png")
@@ -120,6 +122,9 @@ function sceneGame()
 				-- 停止发牌
 				cc.Director:getInstance():getScheduler():unscheduleScriptEntry(schedulerID)   
 			end
+			
+			pokerManager0:dealer()
+			pokerManager1:dealer()
 		end
 
 		schedulerID = cc.Director:getInstance():getScheduler():scheduleScriptFunc(callbackDealer,0.05,false)

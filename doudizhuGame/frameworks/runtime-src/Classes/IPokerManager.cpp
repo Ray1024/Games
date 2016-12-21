@@ -25,24 +25,33 @@ bool IPokerManager::init()
     }
 
 	_exhibitionZone = PokerExhibitionZone::create();
-	//_exhibitionZone->setPosition(50, 250);
-	this->addChild(_exhibitionZone, 1);
+	_exhibitionZone->setPosition(0, -100);
+	this->addChild(_exhibitionZone);
+
+	auto back = Sprite::createWithSpriteFrameName("b/poker_back.png");
+	back->setScale(0.3);
+	this->addChild(back,1);
+
+	_pokerCounts = Label::createWithSystemFont("0", "ËÎÌו", 150);
+	_pokerCounts->setPosition(50,90);
+	back->addChild(_pokerCounts,1);
 
     return true;
 }
 
 bool IPokerManager::dealer()
 {
-	if (_children.size()>=17)
+	if (_pokersIndex.size()>=17)
 	{
 		return false;
 	}
 
-	int index;
+	PokerInfo info;
 	while (1)
 	{
-		index = rand()%54;
-		auto iter = std::find(_pokersIndex.begin(), _pokersIndex.end(), index);
+		info._num = (PokerNum)(rand()%15);
+		info._tag = (PokerTag)(rand()%4);
+		auto iter = std::find(_pokersIndex.begin(), _pokersIndex.end(), info);
 		if (_pokersIndex.size()==0)
 		{
 			break;
@@ -51,16 +60,32 @@ bool IPokerManager::dealer()
 			break;
 		}
 	}
-	_pokersIndex.push_back(index);
+	_pokersIndex.push_back(info);
+
+	updatePokers();
 
 	return true;
 }
 
+void IPokerManager::updatePokers()
+{
+	std::stringstream text;
+	text << _pokersIndex.size();
+	_pokerCounts->setString(text.str());
+}
+
 void IPokerManager::chuPai()
 {
-	std::vector<int> arrayIndexToChuPai;
+	if (_pokersIndex.empty())
+	{
+		return ;
+	}
+
+	std::vector<PokerInfo> arrayIndexToChuPai;
 	arrayIndexToChuPai.push_back(_pokersIndex.back());
 	_pokersIndex.pop_back();
 
 	_exhibitionZone->chuPai(arrayIndexToChuPai);
+
+	updatePokers();
 }

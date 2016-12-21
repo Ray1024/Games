@@ -33,16 +33,17 @@ bool PokerManager::init()
 
 bool PokerManager::dealer()
 {
-	if (_children.size()>=17)
+	if (_pokersIndex.size()>=17)
 	{
 		return false;
 	}
 
-	int index;
+	PokerInfo info;
 	while (1)
 	{
-		index = rand()%54;
-		auto iter = std::find(_pokersIndex.begin(), _pokersIndex.end(), index);
+		info._num = (PokerNum)(rand()%15);
+		info._tag = (PokerTag)(rand()%4);
+		auto iter = std::find(_pokersIndex.begin(), _pokersIndex.end(), info);
 		if (_pokersIndex.size()==0)
 		{
 			break;
@@ -51,11 +52,12 @@ bool PokerManager::dealer()
 			break;
 		}
 	}
-	_pokersIndex.push_back(index);
+	_pokersIndex.push_back(info);
 
 	//Ìí¼Ó¾«Áé
-	auto block = Poker::create(index);
-	this->addChild(block, 100-(index%13));
+	auto block = Poker::create(info);
+	this->addChild(block, 100-info._num);
+	block->setScale(0.8);
 
 	sortAllChildren();
 
@@ -73,20 +75,25 @@ void PokerManager::updatePokers()
 		Poker* poker = dynamic_cast<Poker*>(_children.at(i));
 		if (poker != NULL)
 		{
-			poker->setPosition((i-zeroPoint)*30, poker->getPosition().y);
+			poker->setPosition((i-zeroPoint)*50, poker->getPosition().y);
 		}
 	}
 }
 
 void PokerManager::chuPai()
 {
-	std::vector<int> arrayIndexToChuPai;
+	if (_pokersIndex.empty())
+	{
+		return ;
+	}
+
+	std::vector<PokerInfo> arrayIndexToChuPai;
 	for (auto it=_children.begin(); it!=_children.end(); it++)
 	{
 		Poker* poker = dynamic_cast<Poker*>(*it);
 		if (poker != NULL && poker->isSelected())
 		{
-			arrayIndexToChuPai.push_back(poker->getTypeIndex());
+			arrayIndexToChuPai.push_back(poker->getInfo());
 		}
 	}
 
@@ -95,11 +102,12 @@ void PokerManager::chuPai()
 		for (auto it=_children.begin(); it!=_children.end(); it++)
 		{
 			Poker* poker = dynamic_cast<Poker*>(*it);
-			if (poker != NULL && poker->getTypeIndex()==arrayIndexToChuPai.at(j))
+			if (poker != NULL && 
+				poker->getInfo() == arrayIndexToChuPai.at(j))
 			{
 				removeChild(poker, true);
 				_pokersIndex.erase(
-					std::remove(_pokersIndex.begin(),_pokersIndex.end(),poker->getTypeIndex()),_pokersIndex.end());
+					std::remove(_pokersIndex.begin(),_pokersIndex.end(),poker->getInfo()),_pokersIndex.end());
 				break;
 			}
 		}

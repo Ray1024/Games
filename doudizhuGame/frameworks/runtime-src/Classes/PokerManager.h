@@ -23,7 +23,7 @@ protected:
 
 	PokerExhibitionZone* _exhibitionZone;
 
-	std::vector<int> _pokersIndex;
+	std::vector<PokerInfo> _pokersIndex;
 };
 
 #endif // __POKER_MANAGER_H__

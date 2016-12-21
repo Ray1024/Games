@@ -32,6 +32,8 @@ void AppDelegate::initGLContextAttrs()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
+	srand(time(0));
+
     auto engine = LuaEngine::getInstance();
 	register_all_myclass(engine->getLuaStack()->getLuaState());
     ScriptEngineManager::getInstance()->setScriptEngine(engine);

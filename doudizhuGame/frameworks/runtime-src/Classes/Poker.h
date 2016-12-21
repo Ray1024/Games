@@ -3,87 +3,69 @@
 
 #include "cocos2d.h"
 
-USING_NS_CC;
+enum PokerNum // 牌值
+{
+	NUM_1 = 0,
+	NUM_2,
+	NUM_3,
+	NUM_4,
+	NUM_5,
+	NUM_6,
+	NUM_7,
+	NUM_8,
+	NUM_9,
+	NUM_10,
+	NUM_J,
+	NUM_Q,
+	NUM_K,
+	NUM_XW,
+	NUM_DW
+};
 
-#define POKER_W 95
-#define POKER_H 130
+enum PokerTag // 花色
+{
+	FANGKUAI = 0,
+	MEIHUA,
+	HONGTAO ,
+	HEITAO
+};
+
+struct PokerInfo
+{
+	PokerNum _num;
+	PokerTag _tag;
+
+	inline bool operator==(const PokerInfo &pi) const
+	{
+		if (_num>=13)
+		{
+			if (this->_num==pi._num)
+				return true;
+		}else
+		{
+			if (this->_num==pi._num &&
+				this->_tag==pi._tag)
+				return true;
+		}
+
+		return false;
+	}
+};
 
 class Poker : public cocos2d::Sprite
 {
-	enum Type
-	{
-		HONG1 = 0,	//红桃
-		HONG2,
-		HONG3,
-		HONG4,
-		HONG5,
-		HONG6,
-		HONG7,
-		HONG8,
-		HONG9,
-		HONG10,
-		HONG11,
-		HONG12,
-		HONG13,
-
-		HEI1,		//黑桃
-		HEI2,
-		HEI3,
-		HEI4,
-		HEI5,
-		HEI6,
-		HEI7,
-		HEI8,
-		HEI9,
-		HEI10,
-		HEI11,
-		HEI12,
-		HEI13,
-
-		FANG1,		//方片
-		FANG2,
-		FANG3,
-		FANG4,
-		FANG5,
-		FANG6,
-		FANG7,
-		FANG8,
-		FANG9,
-		FANG10,
-		FANG11,
-		FANG12,
-		FANG13,
-
-		MEI1,		//梅花
-		MEI2,
-		MEI3,
-		MEI4,
-		MEI5,
-		MEI6,
-		MEI7,
-		MEI8,
-		MEI9,
-		MEI10,
-		MEI11,
-		MEI12,
-		MEI13,
-
-		DW,	//大王
-		XW	//小王
-	};
-
 public:
 
-	static Poker* create(int pokerIndex);
+	static Poker* create(PokerInfo info);
 
-    virtual bool init(int pokerIndex);
+	virtual bool init(PokerInfo info);
 
-	bool isSelected() { return _isSelected; }
+	bool isSelected() { return _isSelected; };
 	void click();
 
-	int getTypeIndex() { return (int)_typeIndex; }
+	PokerInfo getInfo() { return _info; };
 
-	Rect getRect();
+	cocos2d::Rect getRect();
 
 	virtual bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 	virtual void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
@@ -91,9 +73,12 @@ public:
 	virtual void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 
 protected:
-	Sprite*	_front;
-	Type		_typeIndex;
+
 	bool		_isSelected;
+
+	PokerInfo	_info;
+
+	cocos2d::Size _size;
 };
 
 #endif // __POKER_H__

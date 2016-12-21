@@ -15,13 +15,17 @@ public:
 
 	virtual bool dealer();
 
+	virtual void updatePokers();
+
 	virtual void chuPai();
 
 protected:
 
 	PokerExhibitionZone* _exhibitionZone;
 
-	std::vector<int> _pokersIndex;
+	std::vector<PokerInfo> _pokersIndex;
+
+	cocos2d::Label*	_pokerCounts;
 };
 
 #endif // __I_POKER_MANAGER_H__

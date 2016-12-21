@@ -2,6 +2,7 @@
 #define __POKER_EXHIBITION_ZONE_H__
 
 #include "cocos2d.h"
+#include "Poker.h"
 
 class PokerExhibitionZone : public cocos2d::Sprite
 {
@@ -12,7 +13,7 @@ public:
 
     virtual bool init();
 
-	void chuPai(std::vector<int> arrayIndexs);
+	void chuPai(std::vector<PokerInfo> arrayIndexs);
 };
 
 #endif // __POKER_EXHIBITION_ZONE_H__

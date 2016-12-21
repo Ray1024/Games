@@ -1,5 +1,4 @@
 #include "PokerExhibitionZone.h"
-#include "Poker.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -27,7 +26,7 @@ bool PokerExhibitionZone::init()
     return true;
 }
 
-void PokerExhibitionZone::chuPai(std::vector<int> arrayIndexs)
+void PokerExhibitionZone::chuPai(std::vector<PokerInfo> arrayIndexs)
 {
 	removeAllChildrenWithCleanup(true);
 
@@ -36,7 +35,7 @@ void PokerExhibitionZone::chuPai(std::vector<int> arrayIndexs)
 	{
 		auto poker = Poker::create(arrayIndexs.at(i));
 		poker->setScale(0.6);
-		this->addChild(poker, 100-(arrayIndexs.at(i)%13));
+		this->addChild(poker, 100-arrayIndexs.at(i)._num);
 	}
 
 	sortAllChildren();
@@ -48,7 +47,7 @@ void PokerExhibitionZone::chuPai(std::vector<int> arrayIndexs)
 		Poker* poker = dynamic_cast<Poker*>(_children.at(i));
 		if (poker != NULL)
 		{
-			poker->setPosition((i-zeroPoint)*15, 0);
+			poker->setPosition((i-zeroPoint)*30, 0);
 		}
 	}
 }

@@ -20,6 +20,12 @@
         
 --------------------------------
 -- 
+-- @function [parent=#Poker] getInfo 
+-- @param self
+-- @return PokerInfo#PokerInfo ret (return value: PokerInfo)
+        
+--------------------------------
+-- 
 -- @function [parent=#Poker] getRect 
 -- @param self
 -- @return rect_table#rect_table ret (return value: rect_table)
@@ -49,14 +55,8 @@
 -- 
 -- @function [parent=#Poker] init 
 -- @param self
--- @param #int pokerIndex
+-- @param #PokerInfo info
 -- @return bool#bool ret (return value: bool)
-        
---------------------------------
--- 
--- @function [parent=#Poker] getTypeIndex 
--- @param self
--- @return int#int ret (return value: int)
         
 --------------------------------
 -- 
@@ -67,7 +67,7 @@
 -- 
 -- @function [parent=#Poker] create 
 -- @param self
--- @param #int pokerIndex
+-- @param #PokerInfo info
 -- @return Poker#Poker ret (return value: Poker)
         
 return nil
