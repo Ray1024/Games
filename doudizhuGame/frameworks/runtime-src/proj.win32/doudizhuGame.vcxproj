@@ -167,11 +167,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\auto\lua_myclass_auto.hpp" />
+    <ClInclude Include="..\Classes\IPokerManager.h" />
+    <ClInclude Include="..\Classes\Poker.h" />
+    <ClInclude Include="..\Classes\PokerExhibitionZone.h" />
+    <ClInclude Include="..\Classes\PokerManager.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\auto\lua_myclass_auto.cpp" />
+    <ClCompile Include="..\Classes\IPokerManager.cpp" />
+    <ClCompile Include="..\Classes\Poker.cpp" />
+    <ClCompile Include="..\Classes\PokerExhibitionZone.cpp" />
+    <ClCompile Include="..\Classes\PokerManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

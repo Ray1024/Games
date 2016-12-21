@@ -59,18 +59,10 @@ function sceneGame()
     player1:setPosition(origin.x + player1:getContentSize().width/2, origin.y + player1:getContentSize().height/2 + 200 - 20)
 	scene:addChild(player1)
 	
-	-- 牌
-	
-	local i=0
-	while( i < 17 )
-	do
-		--local poker_back = cc.Sprite:createWithSpriteFrameName("b/poker_back.png")
-		local poker_back = cc.Sprite:create("poker.png", cc.rect(0 + 105 * i ,0 + 142 * 0,94,130))
-		poker_back:setPosition(origin.x + 75 + 50*i, origin.y + 85)
-		scene:addChild(poker_back)	
-	
-		i = i+1
-	end
+	-- 牌堆
+	local pokerManager = PokerManager:create()
+	pokerManager:setPosition(visibleSize.width/2,visibleSize.height/6)
+	scene:addChild(pokerManager, 1)
 	
 	-- 游戏菜单 ------------------------------------------------------------------------------
 	local function menuCallbackTishi()
@@ -87,6 +79,7 @@ function sceneGame()
 	
 	local function menuCallbackChupai()
 		print("出牌")
+		pokerManager:chuPai()
 	end
 	
 	local itemTishi = createCustomMenuItem("item_tishi.png", "item_tishi_d.png")
@@ -102,7 +95,6 @@ function sceneGame()
     itemBuchu:registerScriptTapHandler(menuCallbackBuchu)
 	
 	local itemChupai = createCustomMenuItem("item_chupai.png", "item_chupai_d.png")
-	itemChupai:setEnabled(false)
 	itemChupai:setPosition(400, 0)
     itemChupai:registerScriptTapHandler(menuCallbackChupai)
 	
@@ -115,9 +107,22 @@ function sceneGame()
 	local menuZhunbei
 	
 	local function menuCallbackZhunbei()
-		print("准备开始游戏")
+		
+		-- 准备开始游戏
 		menuGame:setVisible(true)
 		menuZhunbei:setVisible(false)
+		
+		-- 发牌
+		local schedulerID = nil  
+		
+		local function callbackDealer()
+			if pokerManager:dealer()==false then
+				-- 停止发牌
+				cc.Director:getInstance():getScheduler():unscheduleScriptEntry(schedulerID)   
+			end
+		end
+
+		schedulerID = cc.Director:getInstance():getScheduler():scheduleScriptFunc(callbackDealer,0.05,false)
 	end
 	
 	local itemZhunbei = createCustomMenuItem("item_zhunbei.png", "item_zhunbei.png")
