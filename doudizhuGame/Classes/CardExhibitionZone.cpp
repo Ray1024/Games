@@ -1,11 +1,11 @@
-#include "PokerExhibitionZone.h"
+#include "CardExhibitionZone.h"
 #include <algorithm>
 
 USING_NS_CC;
 
-PokerExhibitionZone* PokerExhibitionZone::create()
+CardExhibitionZone* CardExhibitionZone::create()
 {
-	PokerExhibitionZone *sprite = new (std::nothrow) PokerExhibitionZone();
+	CardExhibitionZone *sprite = new (std::nothrow) CardExhibitionZone();
 	if (sprite && sprite->init())
 	{
 		sprite->autorelease();
@@ -15,7 +15,7 @@ PokerExhibitionZone* PokerExhibitionZone::create()
 	return nullptr;
 }
 
-bool PokerExhibitionZone::init()
+bool CardExhibitionZone::init()
 {
 	// 初始化基类--------------------------------------------------------------
     if ( !Sprite::init() )
@@ -26,16 +26,16 @@ bool PokerExhibitionZone::init()
     return true;
 }
 
-void PokerExhibitionZone::chuPai(std::vector<PokerInfo> arrayIndexs)
+void CardExhibitionZone::chuPai(std::vector<CardInfo> arrayIndexs)
 {
 	removeAllChildrenWithCleanup(true);
 
 	//添加精灵
 	for (int i=0; i<arrayIndexs.size(); ++i)
 	{
-		auto poker = Poker::create(arrayIndexs.at(i));
-		poker->setScale(0.6);
-		this->addChild(poker, 100-arrayIndexs.at(i)._num);
+		auto card = Card::create(arrayIndexs.at(i));
+		card->setScale(0.5);
+		this->addChild(card, 100-arrayIndexs.at(i)._num);
 	}
 
 	sortAllChildren();
@@ -44,10 +44,10 @@ void PokerExhibitionZone::chuPai(std::vector<PokerInfo> arrayIndexs)
 	int zeroPoint = count/2;
 	for (int i=0; i<_children.size(); i++)
 	{
-		Poker* poker = dynamic_cast<Poker*>(_children.at(i));
-		if (poker != NULL)
+		Card* card = dynamic_cast<Card*>(_children.at(i));
+		if (card != NULL)
 		{
-			poker->setPosition((i-zeroPoint)*30, 0);
+			card->setPosition((i-zeroPoint)*30, 0);
 		}
 	}
 }

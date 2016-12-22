@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-enum PokerNum // 牌值
+enum CardNum // 牌值
 {
 	NUM_1 = 0,
 	NUM_2,
@@ -22,7 +22,7 @@ enum PokerNum // 牌值
 	NUM_DW
 };
 
-enum PokerTag // 花色
+enum CardTag // 花色
 {
 	FANGKUAI = 0,
 	MEIHUA,
@@ -30,12 +30,12 @@ enum PokerTag // 花色
 	HEITAO
 };
 
-struct PokerInfo
+struct CardInfo
 {
-	PokerNum _num;
-	PokerTag _tag;
+	CardNum _num;
+	CardTag _tag;
 
-	inline bool operator==(const PokerInfo &pi) const
+	inline bool operator==(const CardInfo &pi) const
 	{
 		if (_num>=13)
 		{
@@ -52,18 +52,20 @@ struct PokerInfo
 	}
 };
 
-class Poker : public cocos2d::Sprite
+class Card : public cocos2d::Sprite
 {
 public:
 
-	static Poker* create(PokerInfo info);
+	static Card* create(CardInfo info);
 
-	virtual bool init(PokerInfo info);
+	virtual bool init(CardInfo info);
+
+	void SetTouchEnabled();
 
 	bool isSelected() { return _isSelected; };
 	void click();
 
-	PokerInfo getInfo() { return _info; };
+	CardInfo getInfo() { return _info; };
 
 	cocos2d::Rect getRect();
 
@@ -76,7 +78,7 @@ protected:
 
 	bool		_isSelected;
 
-	PokerInfo	_info;
+	CardInfo	_info;
 
 	cocos2d::Size _size;
 };

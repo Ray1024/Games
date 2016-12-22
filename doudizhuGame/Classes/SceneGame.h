@@ -3,8 +3,9 @@
 
 #include "cocos2d.h"
 #include "AppCommon.h"
-#include "IPokerManager.h"
-#include "PokerManager.h"
+#include "ICardManager.h"
+#include "CardManager.h"
+#include "BottomCardZone.h"
 
 //---------------------------------------------
 // ”Œœ∑≥°æ∞
@@ -24,7 +25,7 @@ public:
 	void menuBuchuCallback(cocos2d::Ref* pSender);
 	void menuChuPaiCallback(cocos2d::Ref* pSender);
     
-	void initPokers();
+	void initCards();
 	virtual void faPai();
 
     CREATE_FUNC(SceneGame);
@@ -34,11 +35,12 @@ protected:
 	cocos2d::Menu* _menuZhunbei;
 	cocos2d::Menu* _menuGame;
 
-	PokerManager* _pokerManager1;
-	IPokerManager* _pokerManager2;
-	IPokerManager* _pokerManager3;
+	CardManager* _pokerManager1;
+	ICardManager* _pokerManager2;
+	ICardManager* _pokerManager3;
+	BottomCardZone* _bottomCardZone;
 
-	std::vector<PokerInfo> _pokerInfo;
+	std::vector<CardInfo> _pokerInfo;
 };
 
 #endif // __SCENE_GAME_H__

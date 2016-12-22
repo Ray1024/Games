@@ -84,19 +84,23 @@ bool SceneGame::init()
 	this->addChild(player3, 0);
 
 	// ÅÆ¶Ñ-----------------------------------------------
-	_pokerManager1 = PokerManager::create();
+	_pokerManager1 = CardManager::create();
 	_pokerManager1->setPosition(visibleSize.width/2, visibleSize.height/6);
 	this->addChild(_pokerManager1, 1);
 
-	_pokerManager2 = IPokerManager::create();
+	_pokerManager2 = ICardManager::create();
 	_pokerManager2->setPosition(800,485);
 	this->addChild(_pokerManager2, 1);
 
-	_pokerManager3 = IPokerManager::create();
+	_pokerManager3 = ICardManager::create();
 	_pokerManager3->setPosition(150,485);
 	this->addChild(_pokerManager3, 1);
 
-	initPokers();
+	_bottomCardZone = BottomCardZone::create();
+	_bottomCardZone->setPosition(450, 480);
+	this->addChild(_bottomCardZone, 1);
+
+	initCards();
     
     return true;
 }
@@ -135,24 +139,24 @@ void SceneGame::menuChuPaiCallback(Ref* pSender)
 	_pokerManager3->chuPai();
 }
 
-void SceneGame::initPokers()
+void SceneGame::initCards()
 {
 	for (int i=0; i<13; i++)
 	{
 		for (int j=0; j<4; j++)
 		{
-			PokerInfo info;
-			info._num = (PokerNum)i;
-			info._tag = (PokerTag)j;
+			CardInfo info;
+			info._num = (CardNum)i;
+			info._tag = (CardTag)j;
 			_pokerInfo.push_back(info);
 		}
 	}
 
-	PokerInfo info;
-	info._num = (PokerNum)13;
-	info._tag = (PokerTag)0;
+	CardInfo info;
+	info._num = (CardNum)13;
+	info._tag = (CardTag)0;
 	_pokerInfo.push_back(info);
-	info._num = (PokerNum)14;
+	info._num = (CardNum)14;
 	_pokerInfo.push_back(info);
 }
 
@@ -177,6 +181,7 @@ void SceneGame::faPai()
 		}else
 		{
 			//µ×ÅÆ
+			_bottomCardZone->Show(_pokerInfo.at(i));
 		}
 	}
 }

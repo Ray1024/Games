@@ -139,23 +139,25 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
   <ItemGroup>
     <ClCompile Include="..\Classes\AppCommon.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\BottomCardZone.cpp" />
     <ClCompile Include="..\Classes\SceneGame.cpp" />
     <ClCompile Include="..\Classes\SceneMenu.cpp" />
-    <ClCompile Include="..\Classes\IPokerManager.cpp" />
-    <ClCompile Include="..\Classes\Poker.cpp" />
-    <ClCompile Include="..\Classes\PokerExhibitionZone.cpp" />
-    <ClCompile Include="..\Classes\PokerManager.cpp" />
+    <ClCompile Include="..\Classes\ICardManager.cpp" />
+    <ClCompile Include="..\Classes\Card.cpp" />
+    <ClCompile Include="..\Classes\CardExhibitionZone.cpp" />
+    <ClCompile Include="..\Classes\CardManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppCommon.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\BottomCardZone.h" />
     <ClInclude Include="..\Classes\SceneGame.h" />
     <ClInclude Include="..\Classes\SceneMenu.h" />
-    <ClInclude Include="..\Classes\IPokerManager.h" />
-    <ClInclude Include="..\Classes\Poker.h" />
-    <ClInclude Include="..\Classes\PokerExhibitionZone.h" />
-    <ClInclude Include="..\Classes\PokerManager.h" />
+    <ClInclude Include="..\Classes\ICardManager.h" />
+    <ClInclude Include="..\Classes\Card.h" />
+    <ClInclude Include="..\Classes\CardExhibitionZone.h" />
+    <ClInclude Include="..\Classes\CardManager.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

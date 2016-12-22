@@ -1,12 +1,12 @@
-#include "IPokerManager.h"
-#include "Poker.h"
+#include "ICardManager.h"
+#include "Card.h"
 #include <algorithm>
 
 USING_NS_CC;
 
-IPokerManager* IPokerManager::create()
+ICardManager* ICardManager::create()
 {
-	IPokerManager *sprite = new (std::nothrow) IPokerManager();
+	ICardManager *sprite = new (std::nothrow) ICardManager();
 	if (sprite && sprite->init())
 	{
 		sprite->autorelease();
@@ -16,7 +16,7 @@ IPokerManager* IPokerManager::create()
 	return nullptr;
 }
 
-bool IPokerManager::init()
+bool ICardManager::init()
 {
 	// 初始化基类--------------------------------------------------------------
     if ( !Sprite::init() )
@@ -24,8 +24,8 @@ bool IPokerManager::init()
         return false;
     }
 
-	_exhibitionZone = PokerExhibitionZone::create();
-	_exhibitionZone->setPosition(0, -100);
+	_exhibitionZone = CardExhibitionZone::create();
+	_exhibitionZone->setPosition(0, -120);
 	this->addChild(_exhibitionZone);
 
 	auto back = Sprite::createWithSpriteFrameName("b/poker_back.png");
@@ -33,40 +33,40 @@ bool IPokerManager::init()
 	this->addChild(back,1);
 
 	_pokerCounts = Label::createWithSystemFont("0", "宋体", 150);
-	_pokerCounts->setPosition(50,90);
+	_pokerCounts->setPosition(70,110);
 	back->addChild(_pokerCounts,1);
 
     return true;
 }
 
-bool IPokerManager::dealer(PokerInfo info)
+bool ICardManager::dealer(CardInfo info)
 {
 	_pokersIndex.push_back(info);
 
-	updatePokers();
+	updateCards();
 
 	return true;
 }
 
-void IPokerManager::updatePokers()
+void ICardManager::updateCards()
 {
 	std::stringstream text;
 	text << _pokersIndex.size();
 	_pokerCounts->setString(text.str());
 }
 
-void IPokerManager::chuPai()
+void ICardManager::chuPai()
 {
 	if (_pokersIndex.empty())
 	{
 		return ;
 	}
 
-	std::vector<PokerInfo> arrayIndexToChuPai;
+	std::vector<CardInfo> arrayIndexToChuPai;
 	arrayIndexToChuPai.push_back(_pokersIndex.back());
 	_pokersIndex.pop_back();
 
 	_exhibitionZone->chuPai(arrayIndexToChuPai);
 
-	updatePokers();
+	updateCards();
 }

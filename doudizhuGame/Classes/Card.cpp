@@ -1,12 +1,12 @@
-#include "Poker.h"
+#include "Card.h"
 
 USING_NS_CC;
 
-std::vector<PokerInfo> g_pokerInfo;
+std::vector<CardInfo> g_pokerInfo;
 
-Poker* Poker::create(PokerInfo info)
+Card* Card::create(CardInfo info)
 {
-	Poker *sprite = new (std::nothrow) Poker();
+	Card *sprite = new (std::nothrow) Card();
 	if (sprite && sprite->init(info))
 	{
 		sprite->autorelease();
@@ -16,7 +16,7 @@ Poker* Poker::create(PokerInfo info)
 	return nullptr;
 }
 
-bool Poker::init(PokerInfo info)
+bool Card::init(CardInfo info)
 {
 	// 初始化基类--------------------------------------------------------------
 	if ( !Sprite::init() )
@@ -30,17 +30,25 @@ bool Poker::init(PokerInfo info)
 	this->addChild(cardFront);
 	_size = cardFront->getContentSize();
 
-	if (_info._num == PokerNum::NUM_DW)
+	if (_info._num == CardNum::NUM_DW)
 	{
 		auto cardNum = Sprite::createWithSpriteFrameName("b/smalltag_4.png");
 		cardNum->setPosition(-50,10);
 		this->addChild(cardNum);
+
+		auto cardTag = Sprite::createWithSpriteFrameName("b/bigtag_6.png");
+		cardTag->setPosition(20,-30);
+		this->addChild(cardTag);
 	} 
-	else if (_info._num == PokerNum::NUM_XW)
+	else if (_info._num == CardNum::NUM_XW)
 	{
 		auto cardNum = Sprite::createWithSpriteFrameName("b/smalltag_5.png");
 		cardNum->setPosition(-50,10);
 		this->addChild(cardNum);
+
+		auto cardTag = Sprite::createWithSpriteFrameName("b/bigtag_6.png");
+		cardTag->setPosition(20,-30);
+		this->addChild(cardTag);
 	}
 	else 
 	{
@@ -64,26 +72,30 @@ bool Poker::init(PokerInfo info)
 
 	_isSelected = false;
 
+	return true;
+}
+
+void Card::SetTouchEnabled()
+{
 	// 触摸事件
 	auto touchListener = EventListenerTouchOneByOne::create();
 	touchListener->setSwallowTouches(true);
 
-	touchListener->onTouchBegan = CC_CALLBACK_2(Poker::onTouchBegan, this);
-	touchListener->onTouchMoved = CC_CALLBACK_2(Poker::onTouchMoved, this);
-	touchListener->onTouchEnded = CC_CALLBACK_2(Poker::onTouchEnded, this);
-	touchListener->onTouchCancelled = CC_CALLBACK_2(Poker::onTouchCancelled, this);
+	touchListener->onTouchBegan = CC_CALLBACK_2(Card::onTouchBegan, this);
+	touchListener->onTouchMoved = CC_CALLBACK_2(Card::onTouchMoved, this);
+	touchListener->onTouchEnded = CC_CALLBACK_2(Card::onTouchEnded, this);
+	touchListener->onTouchCancelled = CC_CALLBACK_2(Card::onTouchCancelled, this);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-	return true;
 }
 
-Rect Poker::getRect()
+Rect Card::getRect()
 {
 	return Rect(-_size.width / 2, -_size.height / 2, _size.width, _size.height);
 }
 
-bool Poker::onTouchBegan(Touch* touch, Event* event)
+bool Card::onTouchBegan(Touch* touch, Event* event)
 {
 	if (getRect().containsPoint(convertTouchToNodeSpaceAR(touch)))
 	{
@@ -95,22 +107,22 @@ bool Poker::onTouchBegan(Touch* touch, Event* event)
 	return false;
 }
 
-void Poker::onTouchEnded(Touch* touch, Event* event)
+void Card::onTouchEnded(Touch* touch, Event* event)
 {
 
 }
 
-void Poker::onTouchCancelled(Touch* touch, Event* event)
+void Card::onTouchCancelled(Touch* touch, Event* event)
 {
 
 }
 
-void Poker::onTouchMoved(Touch* touch, Event* event)
+void Card::onTouchMoved(Touch* touch, Event* event)
 {
 
 }
 
-void Poker::click()
+void Card::click()
 {
 	if (_isSelected)
 	{
