@@ -84,17 +84,17 @@ bool SceneGame::init()
 	this->addChild(player3, 0);
 
 	// ÅÆ¶Ñ-----------------------------------------------
-	_pokerManager1 = CardManager::create();
-	_pokerManager1->setPosition(visibleSize.width/2, visibleSize.height/6);
-	this->addChild(_pokerManager1, 1);
+	_cardManager1 = CardManager::create();
+	_cardManager1->setPosition(visibleSize.width/2, visibleSize.height/6);
+	this->addChild(_cardManager1, 1);
 
-	_pokerManager2 = ICardManager::create();
-	_pokerManager2->setPosition(800,485);
-	this->addChild(_pokerManager2, 1);
+	_cardManager2 = ICardManager::create();
+	_cardManager2->setPosition(800,485);
+	this->addChild(_cardManager2, 1);
 
-	_pokerManager3 = ICardManager::create();
-	_pokerManager3->setPosition(150,485);
-	this->addChild(_pokerManager3, 1);
+	_cardManager3 = ICardManager::create();
+	_cardManager3->setPosition(150,485);
+	this->addChild(_cardManager3, 1);
 
 	_bottomCardZone = BottomCardZone::create();
 	_bottomCardZone->setPosition(450, 480);
@@ -134,9 +134,9 @@ void SceneGame::menuBuchuCallback(Ref* pSender)
 
 void SceneGame::menuChuPaiCallback(Ref* pSender)
 {
-	_pokerManager1->chuPai();
-	_pokerManager2->chuPai();
-	_pokerManager3->chuPai();
+	_cardManager1->chuPai();
+	_cardManager2->chuPai();
+	_cardManager3->chuPai();
 }
 
 void SceneGame::initCards()
@@ -148,40 +148,40 @@ void SceneGame::initCards()
 			CardInfo info;
 			info._num = (CardNum)i;
 			info._tag = (CardTag)j;
-			_pokerInfo.push_back(info);
+			_cardInfo.push_back(info);
 		}
 	}
 
 	CardInfo info;
 	info._num = (CardNum)13;
 	info._tag = (CardTag)0;
-	_pokerInfo.push_back(info);
+	_cardInfo.push_back(info);
 	info._num = (CardNum)14;
-	_pokerInfo.push_back(info);
+	_cardInfo.push_back(info);
 }
 
 void SceneGame::faPai()
 {
-	std::random_shuffle(_pokerInfo.begin(), _pokerInfo.end());
+	std::random_shuffle(_cardInfo.begin(), _cardInfo.end());
 
-	for (int i=0; i<_pokerInfo.size(); i++)
+	for (int i=0; i<_cardInfo.size(); i++)
 	{
 		if (i<=16)
 		{
 			// ½ÇÉ«1
-			_pokerManager1->dealer(_pokerInfo.at(i));
+			_cardManager1->dealer(_cardInfo.at(i));
 		} else if (i>16 &&i<=33)
 		{
 			// ½ÇÉ«2
-			_pokerManager2->dealer(_pokerInfo.at(i));
+			_cardManager2->dealer(_cardInfo.at(i));
 		} else if (i>33 &&i<=50)
 		{
 			// ½ÇÉ«3
-			_pokerManager3->dealer(_pokerInfo.at(i));
+			_cardManager3->dealer(_cardInfo.at(i));
 		}else
 		{
 			//µ×ÅÆ
-			_bottomCardZone->Show(_pokerInfo.at(i));
+			_bottomCardZone->Show(_cardInfo.at(i));
 		}
 	}
 }

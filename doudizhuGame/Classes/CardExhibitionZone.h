@@ -1,5 +1,5 @@
-#ifndef __POKER_EXHIBITION_ZONE_H__
-#define __POKER_EXHIBITION_ZONE_H__
+#ifndef __CARD_EXHIBITION_ZONE_H__
+#define __CARD_EXHIBITION_ZONE_H__
 
 #include "cocos2d.h"
 #include "Card.h"
@@ -16,4 +16,4 @@ public:
 	void chuPai(std::vector<CardInfo> arrayIndexs);
 };
 
-#endif // __POKER_EXHIBITION_ZONE_H__
+#endif // __CARD_EXHIBITION_ZONE_H__

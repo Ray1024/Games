@@ -2,8 +2,6 @@
 
 USING_NS_CC;
 
-std::vector<CardInfo> g_pokerInfo;
-
 Card* Card::create(CardInfo info)
 {
 	Card *sprite = new (std::nothrow) Card();

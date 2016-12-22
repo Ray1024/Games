@@ -1,5 +1,5 @@
-#ifndef __POKER_H__
-#define __POKER_H__
+#ifndef __CARD_H__
+#define __CARD_H__
 
 #include "cocos2d.h"
 
@@ -83,4 +83,4 @@ protected:
 	cocos2d::Size _size;
 };
 
-#endif // __POKER_H__
+#endif // __CARD_H__

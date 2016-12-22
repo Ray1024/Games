@@ -16,7 +16,7 @@ public:
 
     virtual bool init();
 
-	void Show(CardInfo pokerInfo);
+	void Show(CardInfo cardInfo);
 };
 
 #endif // __BOTTOM_CARD_ZONE_H__

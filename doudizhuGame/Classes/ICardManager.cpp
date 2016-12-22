@@ -32,16 +32,16 @@ bool ICardManager::init()
 	back->setScale(0.3);
 	this->addChild(back,1);
 
-	_pokerCounts = Label::createWithSystemFont("0", "ËÎÌו", 150);
-	_pokerCounts->setPosition(70,110);
-	back->addChild(_pokerCounts,1);
+	_cardCounts = Label::createWithSystemFont("0", "ËÎÌו", 150);
+	_cardCounts->setPosition(70,110);
+	back->addChild(_cardCounts,1);
 
     return true;
 }
 
 bool ICardManager::dealer(CardInfo info)
 {
-	_pokersIndex.push_back(info);
+	_cardIndex.push_back(info);
 
 	updateCards();
 
@@ -51,20 +51,20 @@ bool ICardManager::dealer(CardInfo info)
 void ICardManager::updateCards()
 {
 	std::stringstream text;
-	text << _pokersIndex.size();
-	_pokerCounts->setString(text.str());
+	text << _cardIndex.size();
+	_cardCounts->setString(text.str());
 }
 
 void ICardManager::chuPai()
 {
-	if (_pokersIndex.empty())
+	if (_cardIndex.empty())
 	{
 		return ;
 	}
 
 	std::vector<CardInfo> arrayIndexToChuPai;
-	arrayIndexToChuPai.push_back(_pokersIndex.back());
-	_pokersIndex.pop_back();
+	arrayIndexToChuPai.push_back(_cardIndex.back());
+	_cardIndex.pop_back();
 
 	_exhibitionZone->chuPai(arrayIndexToChuPai);
 

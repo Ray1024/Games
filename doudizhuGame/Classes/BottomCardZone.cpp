@@ -30,14 +30,14 @@ bool BottomCardZone::init()
     return true;
 }
 
-void BottomCardZone::Show(CardInfo pokerInfo)
+void BottomCardZone::Show(CardInfo cardInfo)
 {
 	//removeAllChildrenWithCleanup(true);
 
 	//Ìí¼Ó¾«Áé
-	auto card = Card::create(pokerInfo);
+	auto card = Card::create(cardInfo);
 	card->setScale(0.6);
-	this->addChild(card, 100-pokerInfo._num);
+	this->addChild(card, 100-cardInfo._num);
 
 	sortAllChildren();
 

@@ -33,7 +33,7 @@ bool CardManager::init()
 
 bool CardManager::dealer(CardInfo info)
 {
-	_pokersIndex.push_back(info);
+	_cardIndex.push_back(info);
 
 	//Ìí¼Ó¾«Áé
 	auto card = Card::create(info);
@@ -64,7 +64,7 @@ void CardManager::updateCards()
 
 void CardManager::chuPai()
 {
-	if (_pokersIndex.empty())
+	if (_cardIndex.empty())
 	{
 		return ;
 	}
@@ -88,8 +88,8 @@ void CardManager::chuPai()
 				card->getInfo() == arrayIndexToChuPai.at(j))
 			{
 				removeChild(card, true);
-				_pokersIndex.erase(
-					std::remove(_pokersIndex.begin(),_pokersIndex.end(),card->getInfo()),_pokersIndex.end());
+				_cardIndex.erase(
+					std::remove(_cardIndex.begin(),_cardIndex.end(),card->getInfo()),_cardIndex.end());
 				break;
 			}
 		}

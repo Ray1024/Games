@@ -35,12 +35,12 @@ protected:
 	cocos2d::Menu* _menuZhunbei;
 	cocos2d::Menu* _menuGame;
 
-	CardManager* _pokerManager1;
-	ICardManager* _pokerManager2;
-	ICardManager* _pokerManager3;
+	CardManager* _cardManager1;
+	ICardManager* _cardManager2;
+	ICardManager* _cardManager3;
 	BottomCardZone* _bottomCardZone;
 
-	std::vector<CardInfo> _pokerInfo;
+	std::vector<CardInfo> _cardInfo;
 };
 
 #endif // __SCENE_GAME_H__
