@@ -21,3 +21,5 @@ This game is developed based on cocos2d-x 3.3.
 
 This game is developed based on cocos2d-x 3.0.</br>
 This game only have simple AI.
+
+test
