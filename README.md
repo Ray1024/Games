@@ -1,20 +1,16 @@
 # Games
-Some games developed based on cocos2d-x.</br>
-My Blog Link : http://www.cnblogs.com/Ray1024/
-
-## doudizhuGame-lua
-This game is developed based on cocos2d-x 3.3 in lua.</br>
-This game is modeled on a kind of card game called doudizhu.
+此仓库包含几个基于cocos2dx开发的小游戏。</br>
+博客链接 : http://www.cnblogs.com/Ray1024/
 
 ## doudizhuGame
-This game is developed based on cocos2d-x 3.3 in cpp.</br>
-This game is modeled on a kind of card game called doudizhu.
+游戏名称：单机斗地主
+引擎版本：cocos2dx-3.3
 
 ## planeGame
-This game is developed based on cocos2d-x 3.0.</br>
-This game is modeled on wechat plane game.
+游戏名称：仿微信打飞机
+引擎版本：cocos2dx-3.0
 
 ## XiangQi  
-
-This game is developed based on cocos2d-x 3.0.</br>
-This game only have simple AI.
+游戏名称：单机中国象棋
+引擎版本：cocos2dx-3.0
+开发简介：只有简单电脑AI，暂时不支持电脑复杂走法

@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "SceneMenu.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -11,39 +11,39 @@ AppDelegate::~AppDelegate()
 {
 }
 
-//if you want a different context,just modify the value of glContextAttrs
-//it will takes effect on all platforms
-void AppDelegate::initGLContextAttrs()
-{
-    //set OpenGL context attributions,now can only set six attributions:
-    //red,green,blue,alpha,depth,stencil
-    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
-
-    GLView::setGLContextAttrs(glContextAttrs);
-}
-
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
     auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
-    if(!glview) {
-        glview = GLViewImpl::create("My Game");
-		glview->setFrameSize(960,540);
-        director->setOpenGLView(glview);
-    }
+	auto glview = director->getOpenGLView();
+	if(!glview) {
 
-    // 设置属性
-    director->setDisplayStats(true);
+		glview = GLViewImpl::create("doudizhuGame");
+		director->setOpenGLView(glview);
+	}
+
+	// 根据不同平台设置不同分辨率，设计尺寸设置为一样的
+	Size designSize = Size(960, 540);
+	Size frameSize;
+	auto platform = this->getTargetPlatform();
+	if (Application::Platform::OS_ANDROID == platform)
+	{
+		frameSize = Size(1920, 1080);
+	} else if (Application::Platform::OS_WINDOWS == platform)
+	{
+		frameSize = Size(960, 540);
+	}
+	glview->setFrameSize(frameSize.width, frameSize.height);
+	glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+	
+    // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
 
-	// 加载游戏需要资源
-	auto frameCache = SpriteFrameCache::getInstance();
-	frameCache->addSpriteFramesWithFile("poker_b.plist","poker_b.png");
+    // create a scene. it's an autorelease object
+	auto scene = GameScene::scene();
 
-    // 运行
-    auto scene = SceneMenu::createScene();
+    // run
     director->runWithScene(scene);
-
+	
     return true;
 }
 
