@@ -209,8 +209,8 @@ void GameScene::SendPk()
 		FenChaiNpcPai(m_npcOne);
 		FenChaiNpcPai(m_npcTwo);
 		m_iSendPk = 0;
-		//m_iState = 1;
-		m_iState = 2;
+		m_iState = 1;
+		//m_iState = 2;
 	}
 }
 void GameScene::func(Node* pSender, void* pData){
