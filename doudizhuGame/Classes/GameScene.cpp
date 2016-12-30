@@ -70,23 +70,23 @@ bool GameScene::init()
 		CC_BREAK_IF(!InitNpcBuChuLable());
 
 		//地主标签
-		m_lableDiZhu = Label::createWithSystemFont(
-			_strings.at("dizhu").asString(),
-			"宋体",20);
+		m_lableDiZhu = Label::createWithSystemFont(_strings.at("dizhu").asString(),"宋体",20);
 		m_lableDiZhu->setPosition(Vec2(100,100));
 		this->addChild(m_lableDiZhu,1);
 		m_lableDiZhu->setVisible(false);
+
 		scheduleUpdate();
 
 		isRet = true;
 	} while (0);
 	return isRet;
 }
+
 void GameScene::onEnter()
 {
 	Layer::onEnter();
-
 }
+
 void GameScene::onExit()
 {
 	Layer::onExit();
@@ -136,6 +136,7 @@ bool GameScene::createPokers()
 		pk->showLast();
 		this->addChild(pk);
 		this->m_arrPokers->addObject(pk);
+
 		isRet = true;
 	} while (0);
 	return isRet;
@@ -143,6 +144,7 @@ bool GameScene::createPokers()
 
 bool GameScene::xiPai()
 {
+	// TODO:换成vector后洗牌这样做：std::random_shuffle(_cardInfo.begin(), _cardInfo.end());
 	bool isRet = false;
 	do 
 	{
@@ -172,16 +174,17 @@ bool GameScene::initPlayer()
 	m_Three->setVec2(Vec2(size.width/2,480));
 	m_Three->setPlayerClass(2);
 	//设置主玩家出牌的位置
-	m_playerOut->setVec2(Vec2(size.width/2,size.height/6+106));
+	m_playerOut->setVec2(Vec2(size.width/2,size.height/6+166));
 	m_playerOut->setPlayerClass(3);
 	//设置电脑1玩家出牌位置
 	m_npcOneOut->setVec2(Vec2(146,size.height/2+20));
 	m_npcOneOut->setPlayerClass(4);
 	//设置电脑2玩家出牌位置
-	m_npcTwoOut->setVec2(Vec2(654,size.height/2+20));
+	m_npcTwoOut->setVec2(Vec2(754,size.height/2+20));
 	m_npcTwoOut->setPlayerClass(5);
 	return true;
 }
+
 void GameScene::SendPk()
 {
 	Poker* pk;
@@ -209,26 +212,54 @@ void GameScene::SendPk()
 		FenChaiNpcPai(m_npcOne);
 		FenChaiNpcPai(m_npcTwo);
 		m_iSendPk = 0;
-		m_iState = 1;
-		//m_iState = 2;
+		//m_iState = 1;
+		m_iState = 2;
+
+		Ref* object;
+		CCArray* arrTem = CCArray::create();
+		CCARRAY_FOREACH(m_Three->getArrPk(),object){
+			Poker* pk = (Poker *)object;
+			Poker* pkCopy = pk->copy();
+			arrTem->addObject(pkCopy);
+			addChild(pkCopy);
+			m_player->getArrPk()->addObject(pk);
+			m_player->setIsDiZhu(true);
+			m_npcOne->setIsDiZhu(false);
+			m_npcTwo->setIsDiZhu(false);
+			m_iOutCard = 0;
+		}
+		m_Three->getArrPk()->removeAllObjects();
+		m_Three->getArrPk()->addObjectsFromArray(arrTem);
+		m_Three->updatePkWeiZhi();
+		m_player->updatePkWeiZhi();
+		//显示地主标签
+		m_lableDiZhu->setPosition(playerDiZhuLablePt);
+		m_lableDiZhu->setVisible(true);
+
+		CCARRAY_FOREACH(m_player->getArrPk(),object)
+		{
+			Poker* pk = (Poker*)object;
+			pk->setDianJi(true);
+		}
 	}
 }
+
 void GameScene::func(Node* pSender, void* pData){
 	Player* play = (Player*)pData;
 	play->updatePkWeiZhi();
 	m_isSend = true;
 }
+
 void GameScene::MovePk(Player* play,Poker* pk)
 {
-	MoveTo* move;
 	CCCallFuncND* func;
-	float time = 0.1;
 	play->getArrPk()->addObject(pk);
-	move = MoveTo::create(time,play->getVec2());
+	pk->setPosition(play->getVec2());
 	func = CCCallFuncND::create(this,callfuncND_selector(GameScene::func),play);
-	Sequence* sequence = Sequence::create(move,func,NULL);
+	Sequence* sequence = Sequence::create(DelayTime::create(0.05),func,NULL);
 	pk->runAction(sequence);
 }
+
 void GameScene::update(float delta){
 	switch (m_iState)
 	{
