@@ -3,14 +3,14 @@
 博客链接 : http://www.cnblogs.com/Ray1024/
 
 ## doudizhuGame
-游戏名称：单机斗地主
+游戏名称：单机斗地主</br>
 引擎版本：cocos2dx-3.3
 
 ## planeGame
-游戏名称：仿微信打飞机
+游戏名称：仿微信打飞机</br>
 引擎版本：cocos2dx-3.0
 
 ## XiangQi  
-游戏名称：单机中国象棋
-引擎版本：cocos2dx-3.0
+游戏名称：单机中国象棋</br>
+引擎版本：cocos2dx-3.0</br>
 开发简介：只有简单电脑AI，暂时不支持电脑复杂走法
