@@ -1,9 +1,7 @@
 #include "Player.h"
 #include "Poker.h"
 Player::Player()
-	: m_isCall(false)
-	, m_iCallNum(0)
-	, m_isDiZhu(false)
+	: m_isDiZhu(false)
 	, m_isOutPk(false)
 {
 	m_arrPk = CCArray::create();

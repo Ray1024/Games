@@ -11,8 +11,6 @@ public:
 	
 private:
 	CC_SYNTHESIZE(bool,m_isDiZhu,IsDiZhu);//是否为地主
-	CC_SYNTHESIZE(bool,m_isCall,Call);//是否已叫地主
-	CC_SYNTHESIZE(int,m_iCallNum,CallNum);//叫地主的分数
 	CC_SYNTHESIZE(CCArray*,m_arrPk,ArrPk);//手里拥有的扑克牌
 	CC_SYNTHESIZE(Vec2,m_point,Vec2);//牌在桌面的初始位置
 	CC_SYNTHESIZE(int,m_iPlayerClass,PlayerClass);//玩家种类:0为玩家，1为电脑，2为显示的三张牌,3为玩家要出的牌，4为电脑1要出的牌，5为电脑2要出的牌

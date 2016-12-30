@@ -47,19 +47,14 @@ private:
 	bool xiPai();//洗牌
 	void SendPk();//发牌
 	void MovePk(Player* play,Poker* pk);//发牌移动动画
-	void Call(float dt);//叫地主
 	void func(Node* pSender, void* pData);
 	void update(float delta);
-	void menuCallbackYi(Ref* sender);
-	void menuCallbackEr(Ref* sender);
-	void menuCallbackSan(Ref* sender);
-	void menuCallbackBuJiao(Ref* sender);
+
 	void menuChuPai(Ref* sender);
 	void menuBuChu(Ref* sender);
 	void menuShengLi(Ref* sender);
 	void menuShu(Ref* sender);
-	void NpcCall(Player* npc,Player* npc1);//电脑玩家叫分
-	void ShowFenShu(Vec2 pt,int num); //显示分数
+
 	bool InitNpcBuChuLable();//初始化NPC"不出"标签
 	void OutCard(float delta);//出牌
 	//玩家牌型的判断
@@ -102,7 +97,6 @@ private:
 	CC_SYNTHESIZE(CCArray*,m_arrPlayerOut,ArrPlayerOut);//玩家选的要出的牌
 	Player* m_npcOneOut;//电脑1出的牌
 	Player* m_npcTwoOut;//电脑2出的牌
-	Menu* m_menu;//叫地主菜单
 	Menu* m_chuPaiMenu;//出牌菜单
 	Menu* m_menuShengLi;//胜利菜单
 	Menu* m_menuShu;//输的菜单
@@ -111,10 +105,7 @@ private:
 	bool m_isSend;//是否发完牌
 	int m_iSendPk;//已发出第几张牌
 	int m_iState;//当前状态 0：发牌状态 1：叫地主状态 2：出牌状态 3：结果状态
-	int m_iCall;//论到谁叫斗地主 0：玩家 1：电脑1 2：电脑2
-	int m_iCallTime;//论流叫地主
 	int m_iOutCard;//论到谁出牌
-	bool m_bCall[3];//分数是否被叫 m_bCall[0]:1分 m_bCall[1]:2分 m_bCall[2]:3分
 	int m_type;//打出的类型
 	int m_typeTem;//打出的类型副本
 	bool m_isChiBang;//是否带上翅膀

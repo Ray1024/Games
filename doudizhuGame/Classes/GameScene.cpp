@@ -8,7 +8,7 @@
 
 GameScene::GameScene()
 	: m_isSend(true),m_iSendPk(0),m_iState(0)
-	, m_iCall(0),m_iCallTime(0),m_iOutCard(0)
+	,m_iOutCard(0)
 	, m_type(ERROR_CARD),m_isChiBang(true)
 {
 	m_player = new Player();
@@ -24,9 +24,8 @@ GameScene::GameScene()
 	m_arrGenPk->retain();
 	m_arrPokers = CCArray::create();
 	m_arrPokers->retain();
-	for(int i=0; i<3; ++i)
-		m_bCall[i] = false;
-	playerDiZhuLablePt = Vec2(100,100);
+
+	playerDiZhuLablePt = Vec2(200,100);
 	npcOneDiZhuLablePt = Vec2(65+100,504);
 	npcTwoDiZhuLablePt = Vec2(735-100,504);
 }
@@ -71,7 +70,6 @@ bool GameScene::init()
 
 		//地主标签
 		m_lableDiZhu = Label::createWithSystemFont(_strings.at("dizhu").asString(),"宋体",20);
-		m_lableDiZhu->setPosition(Vec2(100,100));
 		this->addChild(m_lableDiZhu,1);
 		m_lableDiZhu->setVisible(false);
 
@@ -158,6 +156,7 @@ bool GameScene::xiPai()
 	} while (0);
 	return isRet;
 }
+
 bool GameScene::initPlayer()
 {
 	Size size = Director::getInstance()->getVisibleSize();
@@ -177,10 +176,10 @@ bool GameScene::initPlayer()
 	m_playerOut->setVec2(Vec2(size.width/2,size.height/6+166));
 	m_playerOut->setPlayerClass(3);
 	//设置电脑1玩家出牌位置
-	m_npcOneOut->setVec2(Vec2(146,size.height/2+20));
+	m_npcOneOut->setVec2(Vec2(146,size.height/2+100));
 	m_npcOneOut->setPlayerClass(4);
 	//设置电脑2玩家出牌位置
-	m_npcTwoOut->setVec2(Vec2(754,size.height/2+20));
+	m_npcTwoOut->setVec2(Vec2(754,size.height/2+100));
 	m_npcTwoOut->setPlayerClass(5);
 	return true;
 }
@@ -212,7 +211,6 @@ void GameScene::SendPk()
 		FenChaiNpcPai(m_npcOne);
 		FenChaiNpcPai(m_npcTwo);
 		m_iSendPk = 0;
-		//m_iState = 1;
 		m_iState = 2;
 
 		Ref* object;
@@ -244,7 +242,8 @@ void GameScene::SendPk()
 	}
 }
 
-void GameScene::func(Node* pSender, void* pData){
+void GameScene::func(Node* pSender, void* pData)
+{
 	Player* play = (Player*)pData;
 	play->updatePkWeiZhi();
 	m_isSend = true;
@@ -252,12 +251,10 @@ void GameScene::func(Node* pSender, void* pData){
 
 void GameScene::MovePk(Player* play,Poker* pk)
 {
-	CCCallFuncND* func;
 	play->getArrPk()->addObject(pk);
 	pk->setPosition(play->getVec2());
-	func = CCCallFuncND::create(this,callfuncND_selector(GameScene::func),play);
-	Sequence* sequence = Sequence::create(DelayTime::create(0.05),func,NULL);
-	pk->runAction(sequence);
+	CCCallFuncND* func = CCCallFuncND::create(this,callfuncND_selector(GameScene::func),play);
+	pk->runAction(Sequence::create(DelayTime::create(0.05),func,NULL));
 }
 
 void GameScene::update(float delta){
@@ -266,11 +263,8 @@ void GameScene::update(float delta){
 	case 0:
 		SendPk();
 		break;
-	case 1:
-		schedule(schedule_selector(GameScene::Call),1);
-		break;
 	case 2:
-		scheduleOnce(schedule_selector(GameScene::OutCard),0.5);
+		scheduleOnce(schedule_selector(GameScene::OutCard),1);
 		break;
 	case 3:
 		IsShengLi();
@@ -279,190 +273,7 @@ void GameScene::update(float delta){
 		break;
 	}
 }
-void GameScene::Call(float dt){
-	//是否都叫过地主
-	if(!m_player->getCall() || !m_npcOne->getCall() || !m_npcTwo->getCall())
-	{
-		m_iCallTime%=3;
-		switch (m_iCallTime)
-		{
-		case 0://玩家选择地主分数
-			m_menu->setVisible(true);
-			for (int i=0; i<3; i++)
-			{
-				MenuItemFont* itemFont = (MenuItemFont*)m_menu->getChildByTag(i+1);
-				itemFont->setEnabled(!m_bCall[i]);
-			}
 
-			break;
-		case 1://电脑1选择地主分数
-			++m_iCallTime;
-			NpcCall(m_npcTwo,m_npcOne);
-			ShowFenShu(Vec2(m_npcTwo->getVec2().x-88,m_npcTwo->getVec2().y),m_npcTwo->getCallNum());
-			break;
-		case 2://电脑2选择地主分数
-			++m_iCallTime;
-			NpcCall(m_npcOne,m_npcTwo);
-			ShowFenShu(Vec2(m_npcOne->getVec2().x+88,m_npcOne->getVec2().y),m_npcOne->getCallNum());
-			break;
-		}
-	}
-	else//判断谁是地主并把三张牌给他
-	{
-		//如果都没叫地主，把地主给一开始选地主那个
-		if(m_player->getCallNum() == 0 && m_npcOne->getCallNum() == 0 && m_npcTwo->getCallNum() == 0)
-		{
-			switch (m_iCall%3)
-			{
-			case 0:
-				m_player->setCallNum(3);
-				break;
-			case 1:
-				m_npcTwo->setCallNum(3);
-				break;
-			case 2:
-				m_npcOne->setCallNum(3);
-				break;
-			default:
-				break;
-			}
-		}
-		//谁的值大谁当地主
-		Ref* object;
-		if(m_player->getCallNum() > m_npcOne->getCallNum() && m_player->getCallNum() > m_npcTwo->getCallNum()){
-			CCArray* arrTem = CCArray::create();
-			CCARRAY_FOREACH(m_Three->getArrPk(),object){
-				Poker* pk = (Poker *)object;
-				Poker* pkCopy = pk->copy();
-				arrTem->addObject(pkCopy);
-				addChild(pkCopy);
-				m_player->getArrPk()->addObject(pk);
-				m_player->setIsDiZhu(true);
-				m_npcOne->setIsDiZhu(false);
-				m_npcTwo->setIsDiZhu(false);
-				m_iOutCard = 0;
-			}
-			m_Three->getArrPk()->removeAllObjects();
-			m_Three->getArrPk()->addObjectsFromArray(arrTem);
-			m_Three->updatePkWeiZhi();
-			m_player->updatePkWeiZhi();
-			//显示地主标签
-			m_lableDiZhu->setPosition(playerDiZhuLablePt);
-			m_lableDiZhu->setVisible(true);
-		}
-		if(m_npcOne->getCallNum() > m_player->getCallNum() && m_npcOne->getCallNum() > m_npcTwo->getCallNum()){
-			
-			CCArray* arrTem = CCArray::create();
-			CCARRAY_FOREACH(m_Three->getArrPk(),object){
-				Poker* pk = (Poker *)object;
-				Poker* pkCopy = pk->copy();
-				arrTem->addObject(pkCopy);
-				addChild(pkCopy);
-				m_npcOne->getArrPk()->addObject(pk);
-				m_player->setIsDiZhu(false);
-				m_npcOne->setIsDiZhu(true);
-				m_npcTwo->setIsDiZhu(false);
-				m_iOutCard = 2;
-			}
-			m_Three->getArrPk()->removeAllObjects();
-			m_Three->getArrPk()->addObjectsFromArray(arrTem);
-			m_Three->updatePkWeiZhi();
-			//重新分拆牌
-			m_npcOne->m_vecPX.clear();
-			m_npcOne->updatePkWeiZhi();
-			FenChaiNpcPai(m_npcOne);
-			//显示地主标签
-			m_lableDiZhu->setPosition(npcOneDiZhuLablePt);
-			m_lableDiZhu->setVisible(true);
-		}
-		if(m_npcTwo->getCallNum() > m_npcOne->getCallNum() && m_npcTwo->getCallNum() > m_player->getCallNum()){
-			CCArray* arrTem = CCArray::create();
-			CCARRAY_FOREACH(m_Three->getArrPk(),object){
-				Poker* pk = (Poker *)object;
-				Poker* pkCopy = pk->copy();
-				arrTem->addObject(pkCopy);
-				addChild(pkCopy);
-				m_npcTwo->getArrPk()->addObject(pk);
-				m_player->setIsDiZhu(false);
-				m_npcOne->setIsDiZhu(false);
-				m_npcTwo->setIsDiZhu(true);
-				m_iOutCard = 1;
-			}
-			m_Three->getArrPk()->removeAllObjects();
-			m_Three->getArrPk()->addObjectsFromArray(arrTem);
-			m_Three->updatePkWeiZhi();
-			//重新分拆牌
-			m_npcTwo->m_vecPX.clear();
-			m_npcTwo->updatePkWeiZhi();
-			FenChaiNpcPai(m_npcTwo);
-			//显示地主标签
-			m_lableDiZhu->setPosition(npcTwoDiZhuLablePt);
-			m_lableDiZhu->setVisible(true);
-		}
-		m_iState = 2;
-		++m_iCall;
-		m_iCallTime = m_iCall;
-		unschedule(schedule_selector(GameScene::Call));
-		//选定地主后显示三张牌
-		CCARRAY_FOREACH(m_Three->getArrPk(),object){
-			Poker* pk = (Poker*)object;
-			pk->showFront();
-		}
-		//移除叫地主分数的显示
-		this->removeChildByTag(FenShu);
-		this->removeChildByTag(FenShu);
-		this->removeChildByTag(FenShu);
-		//使主玩家的牌为可点击状态
-		CCARRAY_FOREACH(m_player->getArrPk(),object){
-			Poker* pk = (Poker *)object;
-			pk->setDianJi(true);
-		}
-	}
-}
-
-void GameScene::menuCallbackYi(Ref* sender){
-	m_player->setCallNum(1);
-	m_player->setCall(true);
-	m_bCall[0] = true;
-	++m_iCallTime;
-	Size size = Director::getInstance()->getVisibleSize(); 
-	ShowFenShu(Vec2(size.width/2,m_player->getVec2().y+88),1);
-	//隐藏菜单
-	MenuItemFont* font = (MenuItemFont*) sender;
-	font->getParent()->setVisible(false);
-}
-void GameScene::menuCallbackEr(Ref* sender){
-	m_player->setCallNum(2);
-	m_player->setCall(true);
-	m_bCall[1] = true;
- 	++m_iCallTime;
-	Size size = Director::getInstance()->getVisibleSize();
-	ShowFenShu(Vec2(size.width/2,m_player->getVec2().y+88),2);
-	MenuItemFont* font = (MenuItemFont*) sender;
-	font->getParent()->setVisible(false);
-}
-void GameScene::menuCallbackSan(Ref* sender)
-{
-	m_player->setCallNum(3);
-	m_player->setCall(true);
-	m_npcOne->setCall(true);
-	m_npcTwo->setCall(true);
-	m_bCall[2] = true;
-	++m_iCallTime;
-	Size size = Director::getInstance()->getVisibleSize();
-	ShowFenShu(Vec2(size.width/2,m_player->getVec2().y+88),3);
-	MenuItemFont* font = (MenuItemFont*) sender;
-	font->getParent()->setVisible(false);
-}
-void GameScene::menuCallbackBuJiao(Ref* sender){
-	m_player->setCallNum(0);
-	m_player->setCall(true);
-	++m_iCallTime;
-	Size size = Director::getInstance()->getVisibleSize();
-	ShowFenShu(Vec2(size.width/2,m_player->getVec2().y+88),0);
-	MenuItemFont* font = (MenuItemFont*) sender;
-	font->getParent()->setVisible(false);
-}
 void GameScene::menuChuPai(Ref* sender){
 	//隐藏上一次出的牌
 	Ref* object;
@@ -507,127 +318,40 @@ void GameScene::menuShengLi(Ref* sender){
 void GameScene::menuShu(Ref* sender){
 	ReStart();
 }
-bool GameScene::initAnNiu(){
+
+bool GameScene::initAnNiu()
+{
 	Size size = Director::getInstance()->getVisibleSize();
 
-	std::string str;
-	//一分
-	str = _strings.at("yifen").asString();
-	
-	MenuItemFont* yi = MenuItemFont::create(str,
-		CC_CALLBACK_1(GameScene::menuCallbackYi, this));		
-	Size fontWidth = yi->getContentSize();
-	int x =  size.width / 2 - (fontWidth.width * 4 + 20 * 3) / 2;
-	int y =  m_player->getVec2().y + 88;
-	yi->setAnchorPoint(Vec2(0,0.5));
-	yi->setPosition(Vec2(x,y));
-	//二分
-	str = _strings.at("erfen").asString();
-	MenuItemFont* er = MenuItemFont::create(str,
-		CC_CALLBACK_1(GameScene::menuCallbackEr, this));		
-	er->setAnchorPoint(Vec2(0,0.5));
-	er->setPosition(Vec2(x+fontWidth.width+20,y));
-	//三分
-	str = _strings.at("sanfen").asString();
-	MenuItemFont* san = MenuItemFont::create(str,
-		CC_CALLBACK_1(GameScene::menuCallbackSan, this));		
-	san->setAnchorPoint(Vec2(0,0.5));
-	san->setPosition(Vec2(x+fontWidth.width*2+40,y));
-	//不叫
-	str = _strings.at("bujiao").asString();
-	MenuItemFont* buJiao = MenuItemFont::create(str,
-		CC_CALLBACK_1(GameScene::menuCallbackBuJiao, this));		
-	buJiao->setAnchorPoint(Vec2(0,0.5));
-	buJiao->setPosition(Vec2(x+fontWidth.width*3+60,y));
-	//叫地主菜单
-	m_menu = Menu::create();
-	m_menu->addChild(yi,1,1);
-	m_menu->addChild(er,1,2);
-	m_menu->addChild(san,1,3);
-	m_menu->addChild(buJiao,1,4);
-	this->addChild(m_menu);
-	m_menu->setPosition(Vec2::ZERO);
-	m_menu->setVisible(false);
+	std::string str;	
 
-	x = size.width/2 - (fontWidth.width*2 + 20 * 3)/2;
-	y = m_player->getVec2().y+88;
-	//不出
+	//出牌菜单
 	str = _strings.at("buchu").asString();
-	MenuItemFont* buChu = MenuItemFont::create(str,	CC_CALLBACK_1(GameScene::menuBuChu, this));		
-
-	buChu->setAnchorPoint(Vec2(0,0.5));
-	buChu->setPosition(Vec2(x,y));
-	//出牌
+	MenuItemFont* buChu = MenuItemFont::create(str,	CC_CALLBACK_1(GameScene::menuBuChu, this));	
+	buChu->setPosition(Vec2(-50,-100));
 	str = _strings.at("chupai").asString();
 	MenuItemFont* chuPai = MenuItemFont::create(str, CC_CALLBACK_1(GameScene::menuChuPai, this));
-	chuPai->setAnchorPoint(Vec2(0,0.5));
-	chuPai->setPosition(Vec2(x+fontWidth.width+20,y));
-	//出牌菜单
+	chuPai->setPosition(Vec2(50,-100));
 	m_chuPaiMenu = Menu::create();
 	m_chuPaiMenu->addChild(buChu,2,0);
 	m_chuPaiMenu->addChild(chuPai,2,1);
-	m_chuPaiMenu->setPosition(Vec2::ZERO);
 	this->addChild(m_chuPaiMenu,1000);
 	m_chuPaiMenu->setVisible(false);
-	//你胜了的按钮
-	MenuItemFont* shengLi = MenuItemFont::create(_strings.at("youwin").asString(), CC_CALLBACK_1(GameScene::menuShengLi, this));
-	shengLi->setAnchorPoint(Vec2(0.5,0.5));
-	shengLi->setPosition(Vec2(size.width/2,size.height/2));
 
-	m_menuShengLi = Menu::create();
-	m_menuShengLi->addChild(shengLi);
-	m_menuShengLi->setPosition(Vec2::ZERO);
+	//胜利菜单
+	MenuItemFont* shengLi = MenuItemFont::create(_strings.at("youwin").asString(), CC_CALLBACK_1(GameScene::menuShengLi, this));
+	m_menuShengLi = Menu::create(shengLi,NULL);
 	this->addChild(m_menuShengLi);
 	m_menuShengLi->setVisible(false);
-	//你输了的按钮
-	MenuItemFont* shu = MenuItemFont::create( _strings.at("youlost").asString(), CC_CALLBACK_1(GameScene::menuShengLi, this));
-	shu->setAnchorPoint(Vec2(0.5,0.5));
-	shu->setPosition(Vec2(size.width/2,size.height/2));
 
-	m_menuShu = Menu::create();
-	m_menuShu->addChild(shu);
-	m_menuShu->setPosition(Vec2::ZERO);
+	//失败菜单
+	MenuItemFont* shu = MenuItemFont::create( _strings.at("youlost").asString(), CC_CALLBACK_1(GameScene::menuShengLi, this));
+	m_menuShu = Menu::create(shu,NULL);
 	this->addChild(m_menuShu);
 	m_menuShu->setVisible(false);
 	return true;
 }
-void GameScene::NpcCall(Player* npc,Player* npc1){
-	int i = rand()%4;
-	if(i == 3)
-	{
-		npc->setCall(true);
-		npc->setCallNum(0);
-	}
-	else
-	{
-		while (m_bCall[i] == true)	
-			i = rand()%3;
-		m_bCall[i] = true;
-		npc->setCall(true);
-		npc->setCallNum(i+1);
-		//如果叫3分，设置其他玩家已叫地主状态
-		if(i == 2)
-		{
-			m_player->setCall(true);
-			npc1->setCall(true);
-		}
-	}
-}
 
-void GameScene::ShowFenShu(Vec2 pt,int num){
-	std::string str;
-	if (num == 0)
-		str = _strings.at("bujiao").asString();
-	if (num == 1)
-		str = _strings.at("yifen").asString();
-	if (num == 2)
-		str = _strings.at("erfen").asString();
-	if (num == 3)
-		str = _strings.at("sanfen").asString();
-	Label* showFenShu = Label::createWithSystemFont(str, "宋体", 20);
-	showFenShu->setPosition(Vec2(pt.x,pt.y));
-	addChild(showFenShu,1,FenShu);
-}
 void GameScene::OutCard(float delta){
 	switch (m_iOutCard%3)
 	{
@@ -2661,7 +2385,9 @@ void GameScene::ClearOutPk()
 	this->getChildByTag(NpcOneBuChu)->setVisible(false);
 	this->getChildByTag(NpcTwoBuChu)->setVisible(false);
 }
-bool GameScene::IsOutPkFinish(){
+
+bool GameScene::IsOutPkFinish()
+{
 	if(m_player->getArrPk()->count() == 0)
 		return true;
 	if(m_npcOne->getArrPk()->count() == 0)
@@ -2670,29 +2396,18 @@ bool GameScene::IsOutPkFinish(){
 		return true;
 	return false;
 }
-void GameScene::IsShengLi(){
+
+void GameScene::IsShengLi()
+{
 	//玩家出完牌
 	if(m_player->getArrPk()->count() == 0)
 		//胜利
 		m_menuShengLi->setVisible(true);
-	//电脑1出完牌
-	if(m_npcOne->getArrPk()->count() == 0)
-	{
-		if(m_npcOne->getIsDiZhu() || m_player->getIsDiZhu())
-			m_menuShu->setVisible(true);
-		if(m_npcTwo->getIsDiZhu())
-			m_menuShengLi->setVisible(true);
-
-	}
-	//电脑2出完牌
-	if(m_npcTwo->getArrPk()->count() == 0)
-	{
-		if(m_npcTwo->getIsDiZhu() || m_player->getIsDiZhu())
-			m_menuShu->setVisible(true);
-		if(m_npcOne->getIsDiZhu())
-			m_menuShengLi->setVisible(true);
-	}
+	//电脑出完牌
+	if(m_npcOne->getArrPk()->count() == 0 || m_npcTwo->getArrPk()->count() == 0)
+		m_menuShu->setVisible(true);
 }
+
 void GameScene::ReStart(){
 	//初始化
 	m_iState = 0;
@@ -2701,8 +2416,6 @@ void GameScene::ReStart(){
 	m_iOutCard=0;
 	m_type = ERROR_CARD;
 	m_isChiBang = true;
-	for(int i=0; i<3; ++i)
-		m_bCall[i] = false;
 	m_lableDiZhu->setVisible(false);
 	this->getChildByTag(NpcTwoBuChu)->setVisible(false);
 	this->getChildByTag(NpcOneBuChu)->setVisible(false);
@@ -2719,20 +2432,14 @@ void GameScene::ReStart(){
 	}
 	//恢复玩家属性
 	m_player->setIsDiZhu(false);
-	m_player->setCall(false);
-	m_player->setCallNum(0);
 	m_player->setIsOutPk(false);
 	m_player->m_vecPX.clear();
 
 	m_npcOne->setIsDiZhu(false);
-	m_npcOne->setCall(false);
-	m_npcOne->setCallNum(0);
 	m_npcOne->setIsOutPk(false);
 	m_npcOne->m_vecPX.clear();
 
 	m_npcTwo->setIsDiZhu(false);
-	m_npcTwo->setCall(false);
-	m_npcTwo->setCallNum(0);
 	m_npcTwo->setIsOutPk(false);
 	m_npcTwo->m_vecPX.clear();
 	//清除桌面
