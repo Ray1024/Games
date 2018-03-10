@@ -12,12 +12,12 @@
 
 //不同平台的尺寸定义----------------------------------------
 
-//#define ANDROID_MI3		// 移植到小米3平台
+#define ANDROID_MI3		// 移植到小米3平台
 
 #ifdef ANDROID_MI3
 
 // 缩放比例
-#define		SCALE_FACTOR	3.f
+#define		SCALE_FACTOR	1.f/3.f
 #define		WINSIZE_W		1080
 #define		WINSIZE_H		1920
 

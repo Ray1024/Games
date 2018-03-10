@@ -1,4 +1,5 @@
 #include "PlaneWarSprite.h"
+#include "AppMacros.h"
 
 PlaySprite::PlaySprite()
 	:_sprite(NULL)
@@ -70,19 +71,19 @@ void PlaySprite::move(float dt)
 		break;
 	case MM_UP:
 		if (getPlayerPt().y<winSize.height)
-			setPlayerPt(Point(getPlayerPt().x,getPlayerPt().y+2));
+			setPlayerPt(Point(getPlayerPt().x,getPlayerPt().y+2/SCALE_FACTOR));
 		break;
 	case MM_DOWN:
 		if (getPlayerPt().y>0)
-			setPlayerPt(Point(getPlayerPt().x,getPlayerPt().y-2));
+			setPlayerPt(Point(getPlayerPt().x,getPlayerPt().y-2/SCALE_FACTOR));
 		break;
 	case MM_LEFT:
 		if (getPlayerPt().x>0)
-			setPlayerPt(Point(getPlayerPt().x-2,getPlayerPt().y));
+			setPlayerPt(Point(getPlayerPt().x-2,getPlayerPt().y/SCALE_FACTOR));
 		break;
 	case  MM_RIGHT:
 		if (getPlayerPt().x<winSize.width)
-			setPlayerPt(Point(getPlayerPt().x+2,getPlayerPt().y));
+			setPlayerPt(Point(getPlayerPt().x+2,getPlayerPt().y/SCALE_FACTOR));
 		break;
 	}
 }

@@ -52,7 +52,7 @@ bool PlaneWarMenu::init()
 			NULL,
 			CC_CALLBACK_1(PlaneWarMenu::menuStartCallback,this));
 		CC_BREAK_IF(! pStartItem);
-		pStartItem->setPosition(Point(0, 50*SCALE_FACTOR));
+		pStartItem->setPosition(Point(0, 50-0));
 
 		// 添加玩法介绍菜单项（是一个自动释放的对象）
 		MenuItemSprite* pManualItem = MenuItemSprite::create(
@@ -60,7 +60,7 @@ bool PlaneWarMenu::init()
 			NULL,
 			CC_CALLBACK_1(PlaneWarMenu::menuManualCallback,this));
 		CC_BREAK_IF(! pManualItem);
-		pManualItem->setPosition(Point(0, 0*SCALE_FACTOR));
+		pManualItem->setPosition(Point(0, 50-(1*pStartItem->getContentSize().height+15/SCALE_FACTOR)));
 
 		// 添加关于按钮（菜单项）（是一个自动释放的对象）
 		MenuItemSprite* pAboutItem = MenuItemSprite::create(
@@ -68,7 +68,7 @@ bool PlaneWarMenu::init()
 			NULL,
 			CC_CALLBACK_1(PlaneWarMenu::menuAboutCallback,this));
 		CC_BREAK_IF(! pAboutItem);
-		pAboutItem->setPosition(Point(0, -50*SCALE_FACTOR));
+		pAboutItem->setPosition(Point(0, 50-(1*pStartItem->getContentSize().height+15/SCALE_FACTOR)*2));
 
 		// 添加退出按钮（菜单项）（是一个自动释放的对象）
 		MenuItemSprite* pExitItem = MenuItemSprite::create(
@@ -76,7 +76,7 @@ bool PlaneWarMenu::init()
 			NULL,
 			CC_CALLBACK_1(PlaneWarMenu::menuBackCallback,this));
 		CC_BREAK_IF(! pExitItem);
-		pExitItem->setPosition(Point(0, -100*SCALE_FACTOR));
+		pExitItem->setPosition(Point(0, 50-(1*pStartItem->getContentSize().height+15/SCALE_FACTOR)*3));
 
 		// 创建菜单，将菜单项加入
 		Menu* pMenu = Menu::create(pManualItem,pAboutItem,pStartItem,pExitItem,NULL);
@@ -107,7 +107,7 @@ void PlaneWarMenu::menuAboutCallback(Ref* pSender)
 	Sprite* context = ((Sprite*)scene->getChildByTag(1)->getChildByTag(1));
 	Texture2D* image = new Texture2D;
 	Image* im = new Image;
-	im->initWithImageFile("about.png");
+	im->initWithImageFile("about1.png");
 	image->initWithImage(im);
 	context->setTexture(image);
 	Director::getInstance()->pushScene(scene);

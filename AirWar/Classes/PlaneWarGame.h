@@ -34,6 +34,7 @@ public:
 
 	enum zOrder{
 		Z_BG					/* 游戏背景的Z轴顺序		*/,
+		Z_BULLET					/* 游戏背景的Z轴顺序		*/,
 		Z_GAME 				/* 游戏元素的Z轴顺序		*/	,
 		Z_MENU_BG		/* 游戏菜单背景的Z轴顺序		*/	,
 		Z_MENU				/* 游戏菜单的Z轴顺序		*/	,

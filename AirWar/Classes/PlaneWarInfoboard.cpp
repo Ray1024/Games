@@ -1,5 +1,6 @@
 #include "PlaneWarInfoboard.h"
 #include "PlaneWarGame.h"
+#include "AppMacros.h"
 
 Scene* PlaneWarInfoboard::scene()
 {
@@ -50,17 +51,17 @@ bool PlaneWarInfoboard::init()
 			NULL,
 			CC_CALLBACK_1(PlaneWarInfoboard::menuBackCallback,this));
 		CC_BREAK_IF(! pBackItem);
-		pBackItem->setPosition(Point(0, 100));
+		pBackItem->setPosition(Point(0, 400/SCALE_FACTOR));
 
 		// 创建菜单，将菜单项加入
 		Menu* pMenu = Menu::create(pBackItem, NULL);
-		pMenu->setPosition(Point(size.width/2, 100));
+		pMenu->setPosition(Point(size.width/2, 100/SCALE_FACTOR));
 		CC_BREAK_IF(! pMenu);
 		this->addChild(pMenu, PlaneWarGame::Z_MENU);
 
 		// 显示内容
-		Sprite* context = Sprite::create("manual.png");
-		context->setPosition( Point(size.width/2, size.height*1/2) );
+		Sprite* context = Sprite::create("manual1.png");
+		context->setPosition( Point(size.width/2, size.height*2/3) );
 		this->addChild(context, PlaneWarGame::Z_MENU, 1);
 
 		bRet = true;

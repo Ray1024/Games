@@ -2,6 +2,7 @@
 #include "PlaneWarMenu.h"
 #include "SimpleAudioEngine.h"
 #include "PlaneWarSprite.h"
+#include "AppMacros.h"
 
 PlaneWarGame::~PlaneWarGame()
 {
@@ -95,7 +96,7 @@ bool PlaneWarGame::initMenu1()
 		NULL,
 		CC_CALLBACK_1(PlaneWarGame::menuPauseCallback,this) );
 	if(! _pause)return false;
-	_pause->setPosition( Point(50, _size.height-50) );
+	_pause->setPosition( Point(_pause->getContentSize().width/2, _size.height-_pause->getContentSize().height/2) );
 
 	MenuItemSprite* bombItem = MenuItemSprite::create(
 		Sprite::create("bomb.png"),
@@ -110,7 +111,7 @@ bool PlaneWarGame::initMenu1()
 		Sprite::create("bkmusic_close.png"),
 		CC_CALLBACK_1(PlaneWarGame::menuSoundCallback,this));
 	if(! pSoundItem)return false;
-	pSoundItem->setPosition(Point(_size.width-50, _size.height-50));
+	pSoundItem->setPosition(Point(_size.width-pSoundItem->getContentSize().width/2, _size.height-pSoundItem->getContentSize().height/2));
 	pSoundItem->setTag(MENUITEM_SOUND);
 	_issound = true;
 
@@ -128,14 +129,14 @@ bool PlaneWarGame::initMenu3()
 		NULL,
 		CC_CALLBACK_1(PlaneWarGame::menuRestartCallback,this));
 	if(! restartItem1)return false;
-	restartItem1->setPosition(Point(0, 0));
+	restartItem1->setPosition(Point(0, 0/SCALE_FACTOR));
 
 	MenuItemSprite* backItem1 = MenuItemSprite::create(
 		Sprite::create("menu_back1.png"),
 		NULL,
 		CC_CALLBACK_1(PlaneWarGame::menuBackCallback,this));
 	if(! backItem1)return false;
-	backItem1->setPosition(Point(0, -100));
+	backItem1->setPosition(Point(0, -1*restartItem1->getContentSize().height - 60/SCALE_FACTOR));
 
 	Menu* pOverMenu = Menu::create(restartItem1,backItem1,NULL);
 	pOverMenu->setPosition(Point(_size.width/2,_size.height/2));
@@ -144,11 +145,11 @@ bool PlaneWarGame::initMenu3()
 
 	Size size = Director::getInstance()->getWinSize();
 	// 显示分数的标签
-	Label* scoreLabel = Label::createWithSystemFont("1","YouYuan",60);
+	Label* scoreLabel = Label::createWithSystemFont("1","YouYuan",60/SCALE_FACTOR);
 	if(! scoreLabel)return false;
 	scoreLabel->setColor(Color3B(100,100,100));
 	scoreLabel->setAnchorPoint(Point(0,0));
-	scoreLabel->setPosition(Point(300,385));
+	scoreLabel->setPosition(Point(300/SCALE_FACTOR,385/SCALE_FACTOR));
 	// 菜单背景图
 	auto _bg = Sprite::create("menu_bg_over.png");
 	MenuItemSprite* bgItem = MenuItemSprite::create(_bg,_bg);
@@ -173,7 +174,7 @@ bool PlaneWarGame::initMenu2()
 		NULL,
 		CC_CALLBACK_1(PlaneWarGame::menuResumeCallback,this));
 	if(! resumeItem)return false;
-	resumeItem->setPosition(Point(0, 100));
+	resumeItem->setPosition(Point(0, resumeItem->getContentSize().height + 40/SCALE_FACTOR));
 
 	MenuItemSprite* restartItem = MenuItemSprite::create(
 		Sprite::create("menu_restart.png"),
@@ -187,7 +188,7 @@ bool PlaneWarGame::initMenu2()
 		NULL,
 		CC_CALLBACK_1(PlaneWarGame::menuBackCallback,this));
 	if(! backItem)return false;
-	backItem->setPosition(Point(0, -100));
+	backItem->setPosition(Point(0, -1 * resumeItem->getContentSize().height - 40/SCALE_FACTOR));
 
 	Menu* pPauseMenu = Menu::create(bgItem,resumeItem,restartItem,backItem,NULL);
 	if(!pPauseMenu)return false;
@@ -202,14 +203,14 @@ bool PlaneWarGame::initBackground()
 {
 	// 显示分数
 	_label = Label::createWithBMFont("font/font.fnt","0123456789");
-	_label->setPosition(Point(_size.width/2,_size.height-50));
+	_label->setPosition(Point(_size.width/2,_size.height-150/SCALE_FACTOR));
 	_label->setColor(Color3B(0,0,0));
 	this->addChild(_label, Z_MENU);
 
 	// 显示炸弹数量
 	Label* bombcount = Label::createWithBMFont("font/font.fnt","X09");
 	bombcount->setAnchorPoint(Point(0,0));
-	bombcount->setPosition(Point(150,30));
+	bombcount->setPosition(Point(500/SCALE_FACTOR,30/SCALE_FACTOR));
 	bombcount->setColor(Color3B(0,0,0));
 	addChild(bombcount, Z_MENU,LABEL_BOMBCOUNT);
 
@@ -388,7 +389,7 @@ void PlaneWarGame::show()
 	// 显示分数
 	_score = _bulletsDestroyed*100;
 	char str[255] = {0};
-	sprintf(str,"%012d",_score);
+	sprintf(str,"%08d",_score);
 	_label->setString(str);
 
 	sprintf(str,"X%02d",_player->_bombCount);
@@ -665,10 +666,10 @@ void PlaneWarGame::shoot(float dt)
 	}else if (_player->_bulletKind == BK_DOUBLE)
 	{
 		Sprite *bullet = Sprite::create("bullet2.png");
-		addBullet(bullet,Point(_player->getPlayerPt().x-20,_player->getPlayerPt().y));
+		addBullet(bullet,Point(_player->getPlayerPt().x-50/SCALE_FACTOR,_player->getPlayerPt().y));
 
 		Sprite *bullet1 = Sprite::create("bullet2.png");
-		addBullet(bullet1,Point(_player->getPlayerPt().x+20,_player->getPlayerPt().y));
+		addBullet(bullet1,Point(_player->getPlayerPt().x+50/SCALE_FACTOR,_player->getPlayerPt().y));
 	}
 }
 // 添加子弹
@@ -677,7 +678,7 @@ void PlaneWarGame::addBullet(Sprite* bullet, Point pt)
 	if (!bullet) return;
 
 	bullet->setPosition(pt);
-	this->addChild(bullet, Z_GAME);
+	this->addChild(bullet, Z_BULLET);
 
 	bullet->runAction( Sequence::create(
 		CCMoveTo::create(0.5, Point(pt.x,_size.height+bullet->getContentSize().height/2)),

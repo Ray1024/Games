@@ -12,7 +12,7 @@
 
 //不同平台的尺寸定义----------------------------------------
 
-//#define ANDROID_MI3		// 移植到小米3平台
+#define ANDROID_MI3		// 移植到小米3平台
 
 #ifdef ANDROID_MI3
 
